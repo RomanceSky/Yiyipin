@@ -17,10 +17,13 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 #1
-from . import view, testdb
+from . import view, testdb, search
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', view.hello),
     url(r'^testdb$', testdb.testdb),
+    url(r'^search_form$', search.search_form),
+    url(r'^search$', search.search),
+    
 ]
