@@ -1,4 +1,4 @@
-"""Yipin URL Configuration
+""Yipin URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.8/topics/http/urls/
@@ -17,7 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 #1
-from . import view, testdb, search
+from . import view, testdb, search, search2
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -25,5 +25,5 @@ urlpatterns = [
     url(r'^testdb$', testdb.testdb),
     url(r'^search_form$', search.search_form),
     url(r'^search$', search.search),
-    
+    url(r'^search-post$', serach2.search_post),
 ]
