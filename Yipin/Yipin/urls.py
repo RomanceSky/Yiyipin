@@ -1,4 +1,4 @@
-""Yipin URL Configuration
+"""Yipin URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.8/topics/http/urls/
@@ -25,5 +25,6 @@ urlpatterns = [
     url(r'^testdb$', testdb.testdb),
     url(r'^search_form$', search.search_form),
     url(r'^search$', search.search),
-    url(r'^search-post$', serach2.search_post),
+    url(r'^search-post$', search2.search_post),
+    url(r'^display-meta', view.display_meta),
 ]
