@@ -1,0 +1,175 @@
+settings.py
+
+SOA：
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+TEMPLATES = [
+{
+    "BACKEND": "django_jinja.backend.Jinja2",
+    "APP_DIRS": True,
+    "OPTIONS": {
+        "match_extension": ".jinja.html",
+    }
+},
+{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': [],
+    'APP_DIRS': True,#如果'APP_DIRS': True,则直接在app的目录下寻找templates，这个是默认设置，
+    'OPTIONS': {
+        'context_processors': [
+            'django.template.context_processors.debug',
+            'django.template.context_processors.request',
+            'django.contrib.auth.context_processors.auth',
+            'django.contrib.messages.context_processors.messages',
+        ],
+    },
+},
+]
+
+意艺品：
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR+"/templates",],#这儿是自己添加的
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+
+网友的设置：
+django版本：1.9.5
+
+首先设置将templates放在和manage.py同一目录下，然后templates下是模板文件。
+
+然后要设置settings.py:注意修改标黄处。
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates').replace('\\', '/'),],
+        #'APP_DIRS': True,
+        'APP_DIRS': False,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+如果'APP_DIRS': True,则直接在app的目录下寻找templates，这个是默认设置，
+所以最简单的是直接将templates文件夹放在app下。
+
+'APP_DIRS': False,设置为False后，则不会再去app下查找，而是根据DIRS中的路径去进行查找。
+
+<br>以上两种方法测试成功！<br><br><br>可能是由于版本问题，之前的版本应该是有个参数：
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, ‘'templates').replace('\\', '/'),
+)设置
+此法在1.9.5中未测试成功。
+django的版本更新确实会给学习带来很大的成本。
+
+还有一种可扩展的：
+# settings.py
+
+CONTEXT_PROCESSORS = [
+    'django.template.context_processors.debug',
+    'django.template.context_processors.request',
+    'django.contrib.auth.context_processors.auth',
+    'django.contrib.messages.context_processors.messages',
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': CONTEXT_PROCESSORS,
+        },
+    },
+    {
+        'BACKEND': 'path.to.backends.Jinja2Backend',
+        'DIRS': ['templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'environment': 'path.to.env.environment',
+            'context_processors': CONTEXT_PROCESSORS,
+            'extensions': [your extensions here],
+        },
+    },
+]
+
+
+
+
+
+
+吴老二
+Django: 配置和静态文件
+
+运行django-admin.py startproject [project-name] 命令会生成一系列文件，在django 1.6版本以后的settings.py文件中有以下语句：
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+这里用到了python中一个神奇的变量 __file__这个变量可以获取到当前文件(包含这个代码的文件)路径。os.path.dirname(__file__)得到文件所在目录，再来一个os.path.dirname()就是目的上一级BASE_DIR即为项目所在目录。我们在后面的与目录有关的变量都用它，这样使得移植性更强。
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+TEMPLATE_DEBUG = True
+DEBUG=True时，如果出现bug便于我们看见问题所在，但是部署时最好不要让用户看见bug的详情，可能一些不怀好心的人攻击网站，造成不必要的麻烦。
+
+ALLOWED_HOSTS = ['*.besttome.com','www.wulaoer.org']
+ALLOWED_HOSTS允许你设置那些域名可以访问，即使在Apache中绑定了，这里不允许的话，也是不能访问的。
+
+当DEBUG=False时，这个为必填项，如果不想输入，可以用ALLOW_HOSTS = ['*']来允许所有的。
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
+static是静态文件所有目录，比如jquery.js，bootstarp.min.css等文件。
+
+一般来说我们只要把静态文件放在APP中的static目录下，部署时用 python manage.py collectstatic 就可以把静态文件收集到STATIC_ROOT目录，但是有时我们有一些共用的静态文件，这时候可以设置STATICFILES_DIRS另外弄一个文件夹，如下：
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "common_static"),
+    '/var/www/static/',
+)
+这样我们就可以把静态文件放在common_static和/var/www/static/中了，Django也能找到它们。
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+media文件夹用来存放用户上传的文件，与权限有关，详情见 Django静态文件 和Django部署
+
+有时候一些模版不是属于app的，比如baidutongji.html，share.html等，
+
+Django 1.5 - Django 1.7
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates').replace('\\', '/'),
+    os.path.join(BASE_DIR, 'templates2').replace('\\', '/'),
+    # ...
+)
+Django 1.8及以上版本
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR,'templates').replace('\\', '/'),
+            os.path.join(BASE_DIR,'templates2').replace('\\', '/'),
+        ],
+        'APP_DIRS': True,
+]
+这样就可以把模版文件放在templates和templates2文件夹中了。　　
+
