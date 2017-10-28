@@ -20,11 +20,24 @@ from django.contrib import admin
 from . import view, testdb, search, search2
 
 urlpatterns = [
+    
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', view.hello),
     url(r'^testdb$', testdb.testdb),
     url(r'^search_form$', search.search_form),
     url(r'^search$', search.search),
+    
     url(r'^search-post$', search2.search_post),
     url(r'^display-meta', view.display_meta),
+    url(r'search-form/$', view.search_form),
+    url(r'^search2/$', view.search2),
+    url(r'^test-form/$', view.test_formView),
+
+]
+
+urlpatterns += [
+    url(r'^TestApp/', include('TestApp.urls', namespace='TestApp)),
+]
+urlpatterns += [
+    url(r'^User/', include('User.urls', namespace='User')),
 ]

@@ -1,0 +1,8 @@
+<form action="/test-form" method="post">
+ {% csrf_token %}
+
+ <input type="text" name="Time1">-<input type="text" name="Time2">
+ <input type="submit" value="提交">
+</form>
+
+<p>{{time}}</p>
