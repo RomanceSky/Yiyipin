@@ -1,1 +1,2 @@
 Django包括应用app的url和应用app的外层URLpattern(即项目app下的)
+获取Django项目的全部url
