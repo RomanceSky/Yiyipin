@@ -1,4 +1,6 @@
 Yipin(app)
+
+视图
 写views.py文件。主要是编写/main/的视图函数。使用decorators.login_required的装饰件，用来控制非登录用户的访问页面的权限，并且登录成功后，可以回到需要访问的页面。
 
 login_required()的用法是：首先如果用户没有登录，则重定向至settings.LOGIN_URL， 并且在查询字符串中传递当前绝对路径； 其次如果用户已经登录，那么就正常的执行视图函数。views.py:
@@ -15,3 +17,75 @@ import datetime
 @login_required（login_url='/accounts/login'）
 def main(request):
     return render_to_response('main.html')
+
+
+login_required()的用法是：
+首先如果用户没有登录，则重定向至settings.LOGIN_URL， 并且在查询字符串中传递当前绝对路径； 
+其次如果用户已经登录，那么就正常的执行视图函数。
+
+
+URL
+urls.py:
+
+urlpatterns = patterns('',
+    #登录
+    (r'^accounts/login/$',login),
+    #退出
+    (r'^accounts/logout/$',logout),
+
+    #主界面
+    (r'main/$',views.main),
+)
+
+模板文件
+
+
+<html>
+<link href="" rel='' type='text/css'>
+
+<body style='background-color:#CCFFFF'>
+<div class='col-md-3'>
+</div>
+<div class='col-md-6'>
+  <div class='login_title'>
+     <span class='form-horizontal'>NCT数据抓取平台</span>
+  </div>
+  <form class="form-horizontal" role="form" action="/accounts/login/" method="post">
+  {% csrf_token %}
+  <div class="form-group">
+  {% if fofm.errors %}
+    <label for="message" class="col-sm-5 control-label" style='margin:-10px 0px 5px 30px;color:#990033; font-size:10px'>账户或者密码错误</label>
+  {% endif %}
+   </div>
+  <div class='form-group'>
+      <label for="username" class="col-sm-5 control-label" style='color:#330066'>账号</label>
+      <div class="col-sm-5">
+        <input class="form-control" name="username" id='username' placeholder="用户名">
+      </div>
+  </div>
+  <div class="form-group">
+      <label for="password" class="col-sm-2 control-label" style='color:#330066'>密码</label>
+  </div>
+</div>
+<div class="form-group">
+<div class="col-sm-offset-2 col-sm-10">
+    <div class="col-sm-offset-2 col-sm-10" >
+       <input type="submit" class="btn btn-primary" style='color:white' value='登录/'>
+       {% if next %}
+          <input type='hidden' name='next' value='{{ next }}'>
+       {% else %}
+          <input type='hidden' name='next' value='{{ next|add:"/main/" }}'>
+       {% endif %}
+    </div>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+</body>
+
+
+
+
+</html>
