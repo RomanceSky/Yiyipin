@@ -13,13 +13,31 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import include, url
+#zidaide:from django.conf.urls import include, url
+#zidaide:from django.contrib import admin
+#2login in and login out
+from django.conf.urls import patterns, include, url
+from Yipin import views
 from django.contrib import admin
+from django.contrib.auth.views import login,logout
+
+admin.autodiscover()
+
+urlpatterns = patterns('',
+    #登录
+    (r'^login/$',login),
+    #退出
+    (r'^logout/$',logout),
+
+    #主界面
+    (r'mainindex/$',views.main),
+)  
+
 
 #1
 from . import view, testdb, search, search2
 
-urlpatterns = [
+urlpatterns += [
     
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', view.hello),
