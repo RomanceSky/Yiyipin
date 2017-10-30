@@ -1,0 +1,35 @@
+【参考】基于控制权限的django登录界面的实现
+
+正文：
+   django框架提供自带的登录和退出的视图函数
+   但是自己想要设置自定义的登录界面
+ Yipin默认的settings.py  
+   # Application definition
+
+INSTALLED_APPS = (
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'User',#自己添加的
+    'TestApp',#自己添加的
+)
+
+MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+)
+settings.py
+
+首先确保相应的配置是正确的，
+将djnago.contrib.auth和django.contrib.contenttype放到INSTALLED_APPS设置中
+设置模板文件路径
+设置完成后，执行python manage.py syncdb，在数据库中生成相应的数据表
